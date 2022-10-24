@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Telegram;
 
-use Exception;
+use App\Services\Telegram\Exceptions\TelegramBotApiException;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Throwable;
 
 final class TelegramBotApi
 {
@@ -18,24 +18,24 @@ final class TelegramBotApi
     /**
      * Send message via telegram
      * @param string $message
+     * @return bool
      */
-    public static function sendMessage(string $message): void
+    public static function sendMessage(string $message): bool
     {
         try {
             $result = Http::get(
-                self::HOST . config('telegram.token') . '/1sendMessage',
+                self::HOST . config('telegram.token') . '/sendMessage',
                 [
                     'chat_id' => config('telegram.chatId'),
                     'text' => $message
                 ]
-            );
+            )->throw()->json();
 
-            if ($result->getStatusCode() !== 200) {
-                $errors = $result->getBody()->getContents();
-                Log::info(['error' => $errors, 'from' => 'App\Services\Telegram\TelegramBotApi']);
-            }
-        } catch (Exception $e) {
-            Log::info(['error' => $e, 'from' => 'App\Services\Telegram\TelegramBotApi']);
+            return $result['ok'] ?? false;
+        } catch (Throwable $e) {
+            report(new TelegramBotApiException($e->getMessage()));
+
+            return false;
         }
     }
 }

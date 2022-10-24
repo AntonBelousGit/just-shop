@@ -10,8 +10,8 @@ class ProductSeeder extends Seeder
 {
     public function run()
     {
-        Product::factory(20)
-            ->has(Category::factory(rand(1, 3)))
+        Category::factory(10)
+            ->has(Product::factory(rand(5, 15)))
             ->create();
     }
 }
