@@ -1,7 +1,7 @@
-@extends('layouts.auth')
+@extends('layouts.app')
 
 @section('content')
-    @auth()
+    @auth
         <form action="{{route('logOut')}}" method="post">
             @csrf
             @method('DELETE')
