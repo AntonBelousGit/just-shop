@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use Domain\Auth\Models\User;
 use DomainException;
 use Illuminate\Http\RedirectResponse;
 use Laravel\Socialite\Facades\Socialite;
@@ -36,7 +36,6 @@ class SocialAuthController extends Controller
         if ($driver !== 'github') {
             throw new DomainException('Драйвер не поддерживается');
         }
-
         $githubUser = Socialite::driver($driver)->user();
 
         $user = User::query()->updateOrCreate(

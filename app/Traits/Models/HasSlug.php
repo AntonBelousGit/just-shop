@@ -55,7 +55,7 @@ trait HasSlug
     private function isSlugExists(string $slug): bool
     {
         $query = $this->newQuery()
-            ->where(self::slugColumn(), $slug)
+            ->where($this->slugColumn(), $slug)
             ->where($this->getKeyName(), '!=', $this->getKey())
             ->withoutGlobalScopes();
 

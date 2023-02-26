@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,6 +15,8 @@ class CategoryFactory extends Factory
         return [
             'title' => ucfirst($this->faker->words(2, true)),
             'thumbnail' => '',
+            'on_home_page' => $this->faker->boolean(),
+            'sorting' => $this->faker->numberBetween(1, 999)
         ];
     }
 }

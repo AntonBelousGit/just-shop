@@ -19,7 +19,7 @@ class RefreshCommand extends Command
      */
     public function handle(): int
     {
-        if (app()->isProducts()) {
+        if (app()->isProduction()) {
             return self::FAILURE;
         }
 
