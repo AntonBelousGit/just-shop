@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Traits\Models;
+namespace Support\Traits\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -55,7 +55,7 @@ trait HasSlug
     private function isSlugExists(string $slug): bool
     {
         $query = $this->newQuery()
-            ->where(self::slugColumn(), $slug)
+            ->where($this->slugColumn(), $slug)
             ->where($this->getKeyName(), '!=', $this->getKey())
             ->withoutGlobalScopes();
 

@@ -4,34 +4,32 @@ declare(strict_types=1);
 
 namespace Services\Telegram;
 
-use Services\Telegram\Exceptions\TelegramBotApiException;
 use Illuminate\Support\Facades\Http;
+use Services\Telegram\Contracts\TelegramBotApiContract;
+use Services\Telegram\Exceptions\TelegramBotApiException;
 use Throwable;
 
-final class TelegramBotApi
+class TelegramBotApi implements TelegramBotApiContract
 {
-    /**
-     * Telegram API host
-     */
     public const HOST = 'https://api.telegram.org/bot';
 
-    /**
-     * Send message via telegram
-     * @param string $message
-     * @return bool
-     */
-    public static function sendMessage(string $message): bool
+    public static function fake(): TelegramBotApiFake
+    {
+        return app()->instance(
+            TelegramBotApiContract::class,
+            new TelegramBotApiFake()
+        );
+    }
+
+    public static function sendMessage(string $token, int $chatId, string $text): bool
     {
         try {
-            $result = Http::get(
-                self::HOST . config('telegram.token') . '/sendMessage',
-                [
-                    'chat_id' => config('telegram.chatId'),
-                    'text' => $message
-                ]
-            )->throw()->json();
+            $response = Http::get(self::HOST . $token . '/sendMessage', [
+                'chat_id' => $chatId,
+                'text' => $text
+            ])->throw()->json();
 
-            return $result['ok'] ?? false;
+            return $response['ok'] ?? false;
         } catch (Throwable $e) {
             report(new TelegramBotApiException($e->getMessage()));
 
