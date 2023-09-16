@@ -37,9 +37,8 @@ class ThumbnailController extends Controller
             $storage->makeDirectory($newDirPath);
         }
 
-//        dd($realPath,$newDirPath,$resultPath,$storage->path($realPath));
-
-        if (!$storage->exists($resultPath)) {
+        if (!$storage->exists($resultPath))
+        {
             $image = Image::make($storage->path($realPath));
 
             [$w, $h] = explode('x', $size);

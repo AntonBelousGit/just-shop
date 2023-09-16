@@ -23,6 +23,8 @@ class RefreshCommand extends Command
             return self::FAILURE;
         }
 
+        $this->call('optimize:clear');
+
         Storage::deleteDirectory('images/products');
         Storage::deleteDirectory('images/brands');
 
